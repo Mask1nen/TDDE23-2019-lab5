@@ -43,10 +43,20 @@ def cvimg_to_list(img):
 #5A2
 def unsharp_mask(n):
     nvalues = []
-    if n == 1:
+    value = n
+    if value == n:
         nvalues.append(0)
-    elif 
-    value=n-1
+        value = n-1
+    elif value != n and value > 0:
+        pos_value = value // 2 
+        neg_value = value // 2 + 1
+    
+    for column in range(n):
+        for row in range(n):
+            board[column][row] = 
+           
+
+    
 
 
 def blur(x, y):
