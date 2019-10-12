@@ -5,7 +5,8 @@ from cvlib import *
 
 #Uppgift 5A1
 def cvimg_to_list(img):
-    '''the function converts the opencv datastructure to a regular python list consisting of tuples'''
+    '''the function converts the opencv datastructure to a regular 
+    python list consisting of tuples'''
 
     tuplelist = []
     for i in range(len(img)):
@@ -15,23 +16,22 @@ def cvimg_to_list(img):
 
 #5A2
 def unsharp_mask(n):
-    '''creates a 2d list consiting of the gausik blur that can be used on images to make the image sharper'''
+    '''creates a 2d list consiting of the gausik blur that can be used 
+    on images to make the image sharper'''
 
     nvalues = []
     value = n-1
     pos_value = value // 2 
     neg_value = -(value // 2 )
 
-    for column in range(n):
-        nvalues.append([])
-        for row in range(n):
-            gaublur = blur(column-pos_value,row+neg_value)
-            nvalues[column].append(gaublur)
+    nvalues = [[blur(column-pos_value,row+neg_value) for row in 
+    range(n)] for column in range(n)]
     
     return nvalues           
 
 def blur(x, y):
-    '''creates a gausisk blur with the given math formula and special case if x and y is 0'''
+    '''creates a gausisk blur with the given math formula and special 
+    case if x and y is 0'''
 
     if x == 0 and y == 0:
         return 1.5
