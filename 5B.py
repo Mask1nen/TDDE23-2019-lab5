@@ -42,7 +42,6 @@ def generator_from_image(image_list):
     return pix_color
 
 #5B3 and #5B4
-
 def combine_images(hsv_list, condition, generator1, generator2):
     '''defines a function that takes a mask, a condition, and two image
     generators then combines those two images depending on the condition
@@ -65,6 +64,8 @@ def combine_images(hsv_list, condition, generator1, generator2):
     return result
 
 def gradient_condition(seq):
+    '''Defines a function which when given a tuple consisting of color 
+    values of a pixel on a gradient, returns a decimal value.'''
     value = seq[0] / 255
     return value 
 
@@ -110,6 +111,6 @@ mask_list = cvimg_to_list(mask_image)
 result = combine_images(mask_list,gradient_condition,image_generator1,\
 image_generator2)
 
-new_img = rgblist_to_cvimg(result, image1.shape[0], image2.shape[1])
+new_img = rgblist_to_cvimg(result, image1.shape[0], image1.shape[1])
 cv2.imshow('Final image', new_img)
 cv2.waitKey(0)'''
