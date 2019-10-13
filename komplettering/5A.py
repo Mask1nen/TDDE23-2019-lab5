@@ -15,7 +15,7 @@ def cvimg_to_list(img):
 
 #5A2
 def unsharp_mask(n):
-    '''creates a 2d list consiting of the gausik blur that can be used 
+    '''creates a list consisting of the gaussisk blur that can be used 
     on images to make the image sharper'''
 
     nvalues = []
@@ -29,7 +29,7 @@ def unsharp_mask(n):
     return nvalues           
 
 def blur(x, y):
-    '''creates a gausisk blur with the given math formula and special 
+    '''creates gaussisk blur with the given math formula with a special 
     case if x and y is 0'''
 
     if x == 0 and y == 0:
