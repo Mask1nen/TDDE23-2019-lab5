@@ -1,16 +1,15 @@
 import cv2
 from cvlib import *
 import random
-from la5A import cvimg_to_list
+from la5A import *
 
 #5B1
 def pixel_constraint(hlow, hhigh, slow, shigh, vlow, vhigh):
-    '''Defines a function that returns compare as a function.'''
-
-    def compare(pixel):
-        '''Defines a function that checks if the given pixel values is 
+    '''Defines a function that checks if the given pixel values is 
         in range of pixel_constraint values and returns 0 or 1.'''
 
+    def compare(pixel):
+        
         (h,s,v) = pixel
         if h > hlow and h < hhigh and \
                 s > slow and s < shigh and \
@@ -22,20 +21,19 @@ def pixel_constraint(hlow, hhigh, slow, shigh, vlow, vhigh):
 
 #5B2
 def generator_from_image(image_list):
-    '''Defines a function that returns pix_color as a function.'''
+    '''Defines a function that returns a tuple consisting of the color 
+    values of a pixel in a specific index in a list of pixels.'''
 
     def pix_color(pixel):
-        '''The function returns a tuple consisting of the color values 
-        of a pixel in a specific index in a list of pixels.'''
 
         return image_list[pixel]
     return pix_color
 
 #5B3 and #5B4
 def combine_images(bgr_list, condition, generator1, generator2):
-    '''defines a function that takes a mask, a condition, and two image
+    '''the function takes a mask, a condition, and two image
     generators then combines those two images depending on the condition
-    and the mask.'''
+    and the mask and returns a list of the combined images'''
     
     result = []
     for i in range(len(bgr_list)):
@@ -54,8 +52,9 @@ def combine_images(bgr_list, condition, generator1, generator2):
     return result
 
 def gradient_condition(seq):
-    '''Defines a function which when given a tuple consisting of color 
+    '''the function which when given a tuple consisting of color 
     values of a pixel on a gradient, returns a decimal value.'''
+
     value = seq[0] / 255
     return value 
 
@@ -85,7 +84,7 @@ result = combine_images(plane_list, skypixels, plane_generator, star_generator)
 new_img = rgblist_to_cvimg(result, plane_img.shape[0], plane_img.shape[1])
 cv2.imshow('Final image', new_img)
 cv2.waitKey(0)
-'''
+''''''
 #5B4
 image1 = cv2.imread("plane.jpg")
 image1_list = cvimg_to_list(image1)
@@ -103,4 +102,4 @@ image_generator2)
 
 new_img = rgblist_to_cvimg(result, image1.shape[0], image1.shape[1])
 cv2.imshow('Final image', new_img)
-cv2.waitKey(0)
+cv2.waitKey(0)'''
