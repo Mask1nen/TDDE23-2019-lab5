@@ -1,6 +1,7 @@
 import cv2
 from cvlib import *
 import random
+from la5A import cvimg_to_list
 
 #5B1
 def pixel_constraint(hlow, hhigh, slow, shigh, vlow, vhigh):
@@ -19,17 +20,6 @@ def pixel_constraint(hlow, hhigh, slow, shigh, vlow, vhigh):
             return 0
     return compare
 
-#från labb 5A för 5B1
-def cvimg_to_list(img):
-    '''The function converts the opencv datastructure to a regular 
-    python list consisting of tuples.'''
-
-    tuplelist = []
-    for i in range(len(img)):
-        for r in range(len(img[0])):
-            tuplelist.append((img[i][r][0], img[i][r][1], img[i][r][2]))
-    return tuplelist
-
 #5B2
 def generator_from_image(image_list):
     '''Defines a function that returns pix_color as a function.'''
@@ -42,23 +32,23 @@ def generator_from_image(image_list):
     return pix_color
 
 #5B3 and #5B4
-def combine_images(hsv_list, condition, generator1, generator2):
+def combine_images(bgr_list, condition, generator1, generator2):
     '''defines a function that takes a mask, a condition, and two image
     generators then combines those two images depending on the condition
     and the mask.'''
     
     result = []
-    for i in range(len(hsv_list)):
+    for i in range(len(bgr_list)):
         
-        if condition(hsv_list[i]) == 1:
+        if condition(bgr_list[i]) == 1:
             result.append(generator2(i))
 
-        elif condition(hsv_list[i]) == 0:
+        elif condition(bgr_list[i]) == 0:
             result.append(generator1(i))
 
         else:     
-            pixel1 = multiply_tuple(generator2(i),condition(hsv_list[i]))
-            pixel2 = multiply_tuple(generator1(i),(1-condition(hsv_list[i])))
+            pixel1 = multiply_tuple(generator2(i),condition(bgr_list[i]))
+            pixel2 = multiply_tuple(generator1(i),(1-condition(bgr_list[i])))
 
             result.append(add_tuples(pixel1,pixel2))
     return result
@@ -94,9 +84,9 @@ result = combine_images(plane_list, skypixels, plane_generator, star_generator)
 # Omvandla resultatet till en riktig bild och visa upp den
 new_img = rgblist_to_cvimg(result, plane_img.shape[0], plane_img.shape[1])
 cv2.imshow('Final image', new_img)
-cv2.waitKey(0)'''
-
-'''#5B4
+cv2.waitKey(0)
+'''
+#5B4
 image1 = cv2.imread("plane.jpg")
 image1_list = cvimg_to_list(image1)
 image_generator1 = generator_from_image(image1_list)
@@ -113,4 +103,4 @@ image_generator2)
 
 new_img = rgblist_to_cvimg(result, image1.shape[0], image1.shape[1])
 cv2.imshow('Final image', new_img)
-cv2.waitKey(0)'''
+cv2.waitKey(0)
