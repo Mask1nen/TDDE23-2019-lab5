@@ -1,7 +1,10 @@
     
 from la5B import *
 
+##### 5C1 ######
 def test_pixel_constraint():
+    '''Tests and compares the result given by pixel_constraint to the
+    expected result with diffrent input data'''
 
     testvalue = pixel_constraint(50,200,50,200,50,200)
     assert testvalue((100,100,100)) == 1
@@ -9,34 +12,53 @@ def test_pixel_constraint():
     assert testvalue((0,0,0)) == 0
 
 def test_generator_from_image():
+    '''Tests and compares the result given by generator_from_image to 
+    the expected result with diffrent input data'''
 
     testvalue = ((0,0,0), (255,255,255), ())
-    testgenerator1 = generator_from_image(testvalue)
-    assert testgenerator1(0) == (0, 0, 0)
-    assert testgenerator1(1) == (255,255,255)
-    assert testgenerator1(2) == (())
+    testgenerator = generator_from_image(testvalue)
+    assert testgenerator(0) == (0, 0, 0)
+    assert testgenerator(1) == (255,255,255)
+    assert testgenerator(2) == (())
 
 def test_combine_images():
-    
+    '''Tests and compares the result given by combine_images to the
+    expected result with diffrent input data '''
+
     constraint = pixel_constraint(50,200,50,200,50,200)
     testgenerator1 = generator_from_image(((0,0,0), (255,255,255), (100,100,100)))
     testgenerator2 = generator_from_image(((10,10,10), (245,245,245), (90,110,90)))
+    test_bgr_list = ((50,50,50), (100,100,100))
 
     assert combine_images((), constraint, testgenerator1, testgenerator2) == []
 
-    assert combine_images(((50,50,50), (100,100,100)), \
-    constraint ,testgenerator1, testgenerator2) == [(0,0,0), (245,245,245)]
+    assert combine_images(test_bgr_list, constraint ,testgenerator1, \
+    testgenerator2) == [(0,0,0), (245,245,245)]
 
-    assert combine_images(((50,50,50), (100,100,100)), \
-    gradient_condition,testgenerator1, testgenerator2) == [(1.9607843137254901, 1.9607843137254901, 1.9607843137254901), (251.07843137254906, 251.07843137254906, 251.07843137254906)]
+    assert combine_images(test_bgr_list, gradient_condition, \
+    testgenerator1, testgenerator2) == [(1.9607843137254901, 1.9607843137254901, 1.9607843137254901), (251.07843137254906, 251.07843137254906, 251.07843137254906)]
+
+def run_5C1():
+    '''A function that runs test_pixel_constraint, 
+    test_generator_from_image and test_combine_images'''
+
+    test_pixel_constraint()
+    test_generator_from_image()
+    test_combine_images()
+    print("It passed all the tests in 5C1!")
+
+#### 5C2 ######
 
 def exception_pixel_constraint(hlow, hhigh, slow, shigh, vlow, vhigh):
     '''Defines a function that checks if the given pixel values is 
-        in range of pixel_constraint values and returns 0 or 1.'''
+        in range of pixel_constraint values and returns 0 or 1 along 
+        with testcases where errors could occur'''
 
     def compare(pixel):
+
         if not isinstance(pixel, tuple):
             raise TypeError("You have not input a tuple")
+
         elif len(pixel) != 3:
             raise ValueError("The tuple is not a pixel")
 
@@ -57,23 +79,25 @@ def exception_pixel_constraint(hlow, hhigh, slow, shigh, vlow, vhigh):
     return compare
 
 
-#5B2
 def exception_generator_from_image(image_list):
     '''Defines a function that returns a tuple consisting of the color 
-    values of a pixel in a specific index in a list of pixels.'''
+    values of a pixel in a specific index in a list of pixels along 
+    with testcases where errors could occur'''
 
     def pix_color(pixel):
+
         try:
             return image_list[pixel]
         except IndexError:
             raise IndexError("Index in image_list is out of range")
+        
     return pix_color
 
-#5B3 and #5B4
 def exception_combine_images(bgr_list, condition, generator1, generator2):
     '''the function takes a mask, a condition, and two image
     generators then combines those two images depending on the condition
-    and the mask and returns a list of the combined images'''
+    and the mask and returns a list of the combined images, along 
+    with testcases where errors could occur'''
     
     result = []
     for i in range(len(bgr_list)):
@@ -106,14 +130,28 @@ def exception_combine_images(bgr_list, condition, generator1, generator2):
             result.append(add_tuples(pixel1,pixel2))
     return result
 
-def exception_gradient_condition(seq):
-    '''the function which when given a tuple consisting of color 
-    values of a pixel on a gradient, returns a decimal value.'''
+def run_5C2():
+    '''A function that runs exception_pixel_constraint, 
+    exception_generator_from_image and exception_combine_images'''
 
-    value = seq[0] / 255
-    return value 
+    variable1 = exception_pixel_constraint(50,200,50,200,50,200)
+    variable1((50,50,50))
+
+    variable2 = exception_generator_from_image(((10,10,10), (245,245,245), (90,110,90)))
+    variable2(1)
+
+    test_bgr_list = ((50,50,50), (100,100,100))
+    constraint = pixel_constraint(50,200,50,200,50,200)
+    generator1 = generator_from_image(((100,100,100),(200,200,200)))
+    generator2 = generator_from_image(((50,50,50),(150,150,150)))
+    
+    exception_combine_images(test_bgr_list,constraint,generator1,generator2)
+
+    print("It passed all the tests in 5C2!")
 
 def exception_tests():
+    '''some predetermined testcases where the testcases checks that 
+    the code opperates as it schould '''
 
     test1 = exception_generator_from_image([(0,0,0), (0,0,1)])
     test2 = exception_pixel_constraint(50,100,50,100,50,100)
