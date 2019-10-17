@@ -114,22 +114,36 @@ def exception_gradient_condition(seq):
     return value 
 
 def exception_tests():
-    try:
-        test1 = exception_generator_from_image(([0,0,0], [0,0,1]))
-        test1(2)
-        test1(0)
-    except IndexError:
-        print("The index is wrong")
+
+    test1 = exception_generator_from_image([(0,0,0), (0,0,1)])
+    test2 = exception_pixel_constraint(50,100,50,100,50,100)
     
     try:
-        test2 = exception_pixel_constraint(50,100,50,100,50,100)
+        test1(2)
+    except IndexError:
+        print("IndexError")
+
+    try:
+        test1(0)
+    except:
+        print("Någon gick fel med rätt funktion!")
+
+    try:
         test2("a")
-        test2((1,1))
-        test2((256,-1,256))
-        test2(100,100,100)
-
     except TypeError:
-        print("The pixel is not a tuple")
-    except ValueError:
-        print("The tuple does not have the correct values")
+        print("TypeError")
 
+    try:
+        test2((1,1))
+    except ValueError:
+        print("ValueError")
+
+    try:
+        test2((256,-1,256))
+    except ValueError:
+        print("ValueError")
+
+    try:    
+        test2((100,100,100))
+    except:
+        print("Något gick fel med rätt funktion!")
