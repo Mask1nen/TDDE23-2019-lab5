@@ -101,84 +101,66 @@ def exception_combine_images(bgr_list, condition, generator1, generator2):
     with testcases where errors could occur.'''
     
     result = []
-    for i in range(len(bgr_list)):
+    try:
+        for i in range(len(bgr_list)):
+            
+            if condition(bgr_list[i]) == 1:
+                result.append(generator2(i))
 
-        try:
-            test1 = generator1(i)
-        except:
-            raise Exception("generator1 is out of index")
+            elif condition(bgr_list[i]) == 0:
+                result.append(generator1(i))
 
-        try: 
-            test2 = generator2(i)
-        except:
-            raise Exception("generator2 is out of index")
+            else:     
+                pixel1 = multiply_tuple(generator2(i),condition(bgr_list[i]))
+                pixel2 = multiply_tuple(generator1(i),(1-condition(bgr_list[i])))
 
-        try:
-            test3 = condition(bgr_list[i])
-        except:
-            raise Exception("Something went wrong with condition")
-        
-        if condition(bgr_list[i]) == 1:
-            result.append(generator2(i))
+                result.append(add_tuples(pixel1,pixel2))
+        return result
+    except IndexError as e:
+        raise e
 
-        elif condition(bgr_list[i]) == 0:
-            result.append(generator1(i))
+    except ValueError as e:
+        raise e
 
-        else:     
-            pixel1 = multiply_tuple(generator2(i),condition(bgr_list[i]))
-            pixel2 = multiply_tuple(generator1(i),(1-condition(bgr_list[i])))
+    except TypeError as e:
+        raise e
 
-            result.append(add_tuples(pixel1,pixel2))
-    return result
 
 def exception_tests():
     '''Some predetermined testcases where the testcases checks that 
     the code opperates as it should.'''
 
-    test1 = exception_generator_from_image([(0,0,0), (0,0,1)])
+    test1 = exception_generator_from_image([(0,0,0), (0,0,1)])   
+
     test2 = exception_pixel_constraint(50,100,50,100,50,100)
+
     generator1 = exception_generator_from_image([(0,0,0), (0,0,1)])
     generator2 = exception_generator_from_image([(2,2,2), (1,1,1)])
     
     try:
         test1(2)
     except IndexError:
-        print("IndexError from generator_from_image.")
-
-    try:
-        test1(0)
-    except:
-        print("Something went wrong with generator_from_image!")
+        pass
 
     try:
         test2("a")
     except TypeError:
-        print("TypeError in pixel_constraint.")
-
-    try:
-        test2((1,1))
-    except ValueError:
-        print("ValueError in pixel_constraint.")
+        pass        
+    
+    try:    
+        test2((1,1))    
+    except ValueError:    
+        pass
 
     try:
         test2((256,-1,256))
     except ValueError:
-        print("ValueError in pixel_constraint.")
-
-    try:    
-        test2((100,100,100))
-    except:
-        print("Something went wrong with pixel_constraint!")
+        pass
 
     try:
-        exception_combine_images(((0,0,0)), test2, generator1, generator2)
-    except:
-        print("IndexError in combine_images.")
-    
-    try:
-        exception_combine_images(((0,0,0), (1,1,1)), test2, generator1, generator2)
-    except:
-        print("Something went wrong with combine_images!")
+        exception_combine_images(((0,0,0),(1,1,1), (2,2,2)), test2, generator1, generator2)
+    except IndexError:
+        pass
 
 def run_5C2():
     '''A function that runs exception_pixel_constraint, 
@@ -198,6 +180,6 @@ def run_5C2():
     
     exception_combine_images(test_bgr_list,constraint,generator1,generator2)
 
-    exception_tests()  #should give errors
+    exception_tests() 
     
     print("It passed all the tests in 5C2!")
